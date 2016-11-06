@@ -7,4 +7,7 @@ class GameEvents{
 	
 	doMouseWheel(power){
 	}
+	
+	doMouseDown(pos){
+	}
 }

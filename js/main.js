@@ -78,6 +78,10 @@ app.main = {
 
     doMouseDown:function(e){
     	var pos = getMouse(e);
+		for(var i = 0 ; i < this.objs.length;i++){
+			//this.objs[i].doMouseWheel((e.wheelDelta || -e.detail) );
+			this.objs[i].doMouseDown(pos);
+		}
 
 		
     },

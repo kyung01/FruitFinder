@@ -1,7 +1,7 @@
 "use strict";
 
 //renders the search screen
-class RenderSearch extends GameEvents{
+class RenderSearch extends RenderScrollable{
 	
 	constructor(){
 		super();
@@ -20,16 +20,6 @@ class RenderSearch extends GameEvents{
 		this.imagesProfile.set(PROFILE_ID.FETISH, document.getElementById("profileFetish") );
 		this.imagesProfile.set(PROFILE_ID.OLD, document.getElementById("profileOld") );
 		this.imagesProfile.set(PROFILE_ID.DISCRETE, document.getElementById("profileDiscrete") );
-		this.scrollDistance = 0;
-		this.scrollDistanceMax = 1;
-		this.scrollSpeed = 0;
-		this.SCROLL_POWER = 500;
-		
-		
-		this.scrollSpeed = 0;
-		this.SCROLL_POWER = 500;
-		this.scrollDistance = 0;
-		this.scrollDistanceMax = 1;
 		
 	}
 	renderProfile(ctx, profile, position, width, height,isSelf){
@@ -63,18 +53,7 @@ class RenderSearch extends GameEvents{
 	}
 	
 	update(timeElapsed){
-		timeElapsed = Math.min(timeElapsed, 1/10);
-		var unit = 0 - this.scrollSpeed;
-		unit /= (0.00000001 + Math.abs(this.scrollSpeed ));
-		var slow = 150+this.scrollSpeed*this.scrollSpeed * (0.031);
-		this.scrollSpeed +=Math.min(Math.abs(this.scrollSpeed) ,slow* timeElapsed ) * unit ;
-		this.scrollDistance += this.scrollSpeed * timeElapsed;
-		if(this.scrollDistance >0){
-			this.scrollDistance -=this.scrollDistance  * 0.9 *  Math.min(1, timeElapsed*5);
-		}
-		if(this.scrollDistance < -(this.scrollDistanceMax )){
-			this.scrollDistance += -(this.scrollDistanceMax + this.scrollDistance ) * 0.9 *  Math.min(1, timeElapsed*5);
-		}
+		super.update(timeElapsed);
 		
 	}
 	render(ctx, width, height,profiles){
@@ -82,7 +61,6 @@ class RenderSearch extends GameEvents{
 		
 		var size = Math.min(width, height)/3;
 		var headerHeight = height / 18;
-		this.scrollDistanceMax = Math.floor( (profiles.length-1)/3) * (width/3);
 		ctx.save();
 		ctx.translate(0,this.scrollDistance);
 		ctx.strokeStyle = "rgba(255,255,255,1)";
@@ -101,8 +79,5 @@ class RenderSearch extends GameEvents{
 			
 		}
 		ctx.restore();
-	}
-	doMouseWheel(power){
-		this.scrollSpeed += power * this.SCROLL_POWER;
 	}
 }

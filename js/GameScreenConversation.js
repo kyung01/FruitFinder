@@ -3,8 +3,7 @@
 //renders the search screen
 class GameScreenConversation{
 	
-	constructor(conversation){
-		this.conversation = conversation;
+	constructor(){
 		
 	}
 	update(timeElapsed){

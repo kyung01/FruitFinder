@@ -17,7 +17,7 @@ class Conversation{
 		this.before = before;
 		this.next= next;
 		this.head = head;
-		this.cotent = content;
+		this.content = content;
 		this.choices = choices;	
 	}
 	addChoice(choice){
@@ -26,7 +26,9 @@ class Conversation{
 	}
 	static Get_Example(){
 		var lineEmpty =  new ScriptLine(SCRIPT_LINE_TYPE.EMPTY,"");
-		var conv_empty =			new Conversation(false,false,lineEmpty , [lineEmpty], [] );
+		var conv_empty =			new Conversation(false,false,lineEmpty , [new ScriptLine(SCRIPT_LINE_TYPE.TEXT,"0 TEXT"),
+																			  new ScriptLine(SCRIPT_LINE_TYPE.IMAGE,"1 Image"),
+																			 new ScriptLine(SCRIPT_LINE_TYPE.TEXT,"2 TEXT")], [] );
 		var conv_hi =				new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hi"),[lineEmpty],[])
 		var conv_hiBackToYou =	new Conversation(false,false,lineEmpty, [new ScriptLine(1, "HiBackToYou")] , []);
 
