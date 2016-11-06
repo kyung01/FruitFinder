@@ -4,9 +4,16 @@ class Profile{
 		this.name = name;
 		this.id = id;
 		this.conversation = conversation;
-		this.isNewMessage = false;
+		this.isNewMessage = 0;
+		this.respondingTime = 0;
 		this.respondingSpeed = respondingSpeed;
 		
+	}
+	reset(){
+		//if(this.isNewMessage) console.log("new meesage flushed");
+		this.conversation.readContent(this.isNewMessage);
+		this.isNewMessage = 0;
+		this.respondingTime = 0;
 	}
 	getName(){
 		return this.name;
@@ -14,11 +21,18 @@ class Profile{
 	getIsOnline(){
 		return this.isOnline;
 	}
+	update(timeElapsed){
+		var timeNeeded = 0.0001+ ( this.conversation.content.length) * this.respondingSpeed;
+		this.respondingTime =Math.min(this.respondingTime +  timeElapsed , timeNeeded);
+		
+		this.conversation.progress = this.respondingTime / timeNeeded;
+		this.isNewMessage = Math.floor( this.respondingTime / this.respondingSpeed) ; 
+	}
 	
 	static Get_Example(){
 		var profiles = new Array();
 		profiles.push( new Profile(PROFILE_ID.SELF,"YOU",0,1));
-		profiles.push( new Profile(PROFILE_ID.SUGAR,"SugarSweet",Conversation.Get_Example(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.SUGAR,"SugarSweet",Conversation.GET_SUGAR(), 3 ) );
 		/*
 		profiles.push( new Profile(PROFILE_ID.OLD,"OLD",false));
 		profiles.push( new Profile(PROFILE_ID.HOT,"HAUT",false));

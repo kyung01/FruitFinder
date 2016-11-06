@@ -100,7 +100,7 @@ app.main = {
 		this.ctx.fillRect(0,0,this.WIDTH,this.HEIGHT);
 		
 		for(var i = 0 ; i < this.objs.length;i++){
-			this.objs[i].update(dt.toFixed(3));
+			this.objs[i].update(parseFloat(dt.toFixed(3)) );
 		}
 		
 		for(var i = 0 ; i < this.objs.length;i++){

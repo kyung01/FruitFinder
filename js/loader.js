@@ -13,6 +13,7 @@ var app = app || {};
 
 window.onload = function(){
 	console.log("window.onload called");
+	loadImages();
 	app.main.init();
 }
 window.onblur = function(){

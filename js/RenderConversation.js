@@ -13,13 +13,21 @@ class RenderConversation extends RenderScrollable{
 		
 		this.ratioAnimationDir = 1;
 		this.ratioAnimation = 0;
-		this.e_answerSelected = [];
+		
+		this.e_answerSelected = new Array();
+		
+		this.isDisplayAnswer = false;
+		this.timerDisplayAnswer = 0;
 	}
-	link(item){
-		this.e_answerSelected.push(item);
+	reset(){
+		this.isDisplayAnswer = false;
+		this.timerDisplayAnswer = 0;
 	}
 	update(timeElapsed){
 		super.update(timeElapsed);
+		if(this.isDisplayAnswer) 
+			this.timerDisplayAnswer = Math.min(1, this.timerDisplayAnswer + timeElapsed*0.3);
+		
 		this.ratioAnimation = Math.max(0,Math.min(1, this.ratioAnimation + 2*timeElapsed * this.ratioAnimationDir) , 0);
 		if(this.ratioAnimation == 0 || this.ratioAnimation == 1)
 			this.ratioAnimationDir *= -1;
@@ -36,38 +44,63 @@ class RenderConversation extends RenderScrollable{
 		var characterMax = 25;
 		//this.renderLine.render(ctx,width,height,line.content,{x:0,y:0},fontSize,characterMax, this.colorPersonA[0],this.colorPersonA[1]);
 		var rectSize = {height:0};
+		var x,y,rectSize,color00,color01;
+		if(line.type == SCRIPT_LINE_TYPE.TEXT)
+			rectSize = this.renderLine.getRectSize(ctx,line.content,fontSize,characterMax);
+		else if(line.type == SCRIPT_LINE_TYPE.IMAGE)
+			rectSize = this.renderLine.getImageRectSize(fontSize,characterMax);
 		
-		switch(type){
-			default:
-				//sent my me
-				//rectSize = this.renderLine.render(ctx,width,height,line.content,0,0, fontSize,characterMax, this.colorPersonA[0],this.colorPersonA[1]);
-				//console.log(line.content , this.offsetY, rectSize);
+		if(type ==0){
+			x=width - rectSize.width; 
+			y= this.offsetY;
+			color00= this.colorPersonA[0];
+			color01 = this.colorPersonA[1];
+		}
+		else if( type ==1){
+			x=0; 
+			y= this.offsetY;
+			color00= this.colorPersonB[0];
+			color01 = this.colorPersonB[1];
+		}
+		else if(type == 2)
+		{
+			x = Math.floor((width-rectSize.width)/2 );
+			y = this.offsetY;
+			color00 = this.colorChoices[0];
+			color01 = this.colorChoices[1];
+			this.inputIcon.push(new BoxClick(x,y, rectSize.width, rectSize.height));
+		}
+		
+		switch(line.type){
+			case SCRIPT_LINE_TYPE.TEXT:
+				
+				this.renderLine.render(ctx,width,height,line.content,{x:x,y:y},fontSize,characterMax, color00,color01,true);
+
 				break;
-				//me
-			case 1:
-				//sent by other person
-				if(line.type == SCRIPT_LINE_TYPE.TEXT){
-					rectSize = this.renderLine.getRectSize(line.content,fontSize,characterMax);
-					this.renderLine.render(ctx,width,height,line.content,{x:0,y:this.offsetY},fontSize,characterMax, this.colorPersonB[0],this.colorPersonB[1],true);
-				}
-				else{
-				}
-				//rectSize = this.renderLine.render(ctx,width,height,line.content,{x:0,y:this.offsetY},fontSize,characterMax, this.colorPersonA[0],this.colorPersonA[1]);
-				//console.log(line.content , this.offsetY, rectSize);
-				break;
-			case 2:		
-				var x=0,y=0;
-				//list of choices
-				if(line.type == SCRIPT_LINE_TYPE.TEXT){
-					rectSize = this.renderLine.getRectSize(line.content,fontSize,characterMax);
-					x = (width-rectSize.width)/2;
-					y = this.offsetY;
-					this.renderLine.render(ctx,width,height,line.content,{x:x,y:y},fontSize,characterMax, this.colorChoices[0],this.colorChoices[1],true);
-				}
-				this.inputIcon.push(new BoxClick(x,y, rectSize.width, rectSize.height));
+			case SCRIPT_LINE_TYPE.IMAGE:
+				//console.log(line.content, IMAGES.get(line.content),IMAGES);
+				this.renderLine.renderImage(ctx,width,height,fontSize,color00,color01,IMAGES.get(line.content),{x:x,y:y},rectSize.width,rectSize.height,true);
 				break;
 		}
 		this.offsetY += rectSize.height + height * 0.01;
+	}
+	renderConversation(ctx, width, height, conversation ) {
+		
+		
+		if(conversation.head.type != SCRIPT_LINE_TYPE.EMPTY){
+			this.renderScriptLine(ctx,width,height,conversation.head,0);
+		}
+		for(var i = 0 ; i < conversation.contentUsed.length;i++){
+			//console.log(conversation.content);
+			this.renderScriptLine(ctx,width,height,conversation.contentUsed[i],1);
+		}
+		
+		if(!conversation.next&& this.timerDisplayAnswer ==1)
+			for(var i = 0 ; i < conversation.choices.length;i++){
+			this.renderScriptLine(ctx,width,height,conversation.choices[i].head,2);
+		}
+		if(conversation.next)
+			this.renderConversation(ctx,width,height,conversation.next);
 	}
 	render(ctx, width, height, conversation,progress){
 		this.inputIcon = [];
@@ -76,32 +109,26 @@ class RenderConversation extends RenderScrollable{
 		var line00 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"How about you send a face pic and I will tell you how hard I will..wqewqeqweqwe.");
 		var line01 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"qqqqqq");
 		var line02 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"aqweqewqeeqwqewbc");
+		this.isDisplayAnswer = conversation.content.length ==0;
+		//console.log(this.isDisplayAnswer,this.timerDisplayAnswer);
 		line01.pos = {x:200,y:200};
 		line02.pos = {x: 250, y:300};
-		//line00.render(ctx,width,height,20,25, colorPersonB00,colorPersonB01);
-		
+		while(conversation.before)
+			conversation = conversation.before;
 		this.renderBegin();
-		
-		if(conversation.head.type != SCRIPT_LINE_TYPE.EMPTY){
-			this.renderScriptLine(ctx,width,height,conversation.head,0);
-		}
-		for(var i = 0 ; i < conversation.content.length;i++){
-			//console.log(conversation.content);
-			this.renderScriptLine(ctx,width,height,conversation.content[i],1);
-		}
-		
-		for(var i = 0 ; i < conversation.choices.length;i++){
-			this.renderScriptLine(ctx,width,height,conversation.choices[i].head,2);
-		}
+		this.renderConversation(ctx,width,height,conversation);		
 		ctx.restore();
 		this.scrollDistanceMax = 1 + this.offsetY;
+		//line00.render(ctx,width,height,20,25, colorPersonB00,colorPersonB01);
+		
+		
 	}
 	doMouseDown(pos){
 		for(var i= 0; i < this.inputIcon.length;i++){
 			if(this.inputIcon[i].isAt(pos.x, pos.y - this.scrollDistance)){
 				//console.log("clicked ",i);
-				for(var j = 0 ; j < e_answerSelected.length;j++){
-					e_answerSelected[j].e_answerSelected(i);
+				for(var j = 0 ; j < this.e_answerSelected.length;j++){
+					this.e_answerSelected[j](i);//.e_answerSelected(i);
 				}
 			}
 			//console.log(pos.x, pos.y - this.scrollDistance, this.inputIcon[i]);
