@@ -18,6 +18,8 @@ class RenderConversation extends RenderScrollable{
 		
 		this.isDisplayAnswer = false;
 		this.timerDisplayAnswer = 0;
+		
+		this.maxHeightOld = 0;
 	}
 	reset(){
 		this.isDisplayAnswer = false;
@@ -118,9 +120,13 @@ class RenderConversation extends RenderScrollable{
 		this.renderBegin();
 		this.renderConversation(ctx,width,height,conversation);		
 		ctx.restore();
-		this.scrollDistanceMax = 1 + this.offsetY;
+		this.scrollDistanceMax = 1 + Math.max(0, this.offsetY-height);
 		//line00.render(ctx,width,height,20,25, colorPersonB00,colorPersonB01);
 		
+		if(this.maxHeightOld != this.offsetY){
+			this.maxHeightOld = this.offsetY;
+			this.scrollDistance = Math.min( 0, height - this.offsetY);
+		}
 		
 	}
 	doMouseDown(pos){

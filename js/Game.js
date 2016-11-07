@@ -26,7 +26,13 @@ class Game extends GameEvents{
 			profiles[i].update(timeElapsed);
 		}
 		if(this.state == 2){			
-			if(this.profileSelected.isNewMessage )this.profileSelected.reset();
+			if(this.profileSelected.isNewMessage ){
+				var achivements = this.profileSelected.reset();
+				for(var i = 0 ; i < achivements.length;i++){
+					if(achivements[i] != "")
+						this.renderAchievement.init(achivements[i]);
+				}	
+			}
 		}
 	}
 	update(timeElapsed){

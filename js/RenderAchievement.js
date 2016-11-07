@@ -75,14 +75,14 @@ class RenderAchievement extends GameEvents{
 		ctx.restore();
 	}
 	rednerArm(ctx,width,height){
-		var x= 0, y = height * 0.7;
+		var x= 0, y = height * 0.6;
 		var imageSize = width* 0.8; 
 		ctx.save();
 		ctx.translate(-imageSize*1.2 + imageSize *this.progress, 0);
 		ctx.rotate( Math.cos(this.progress*this.progress *5)  * 3.14*0.09 * (1- (this.progress *this.progress ) )
 				   + Math.cos(this.progressArm) *( 3.14*0.02 )*( this.progress* this.progress* this.progress* this.progress)
 				  );
-		ctx.drawImage(this.imgHand ,x,y-imageSize, imageSize,imageSize);
+		ctx.drawImage(this.imgHand ,x,y, imageSize,imageSize);
 		ctx.restore();
 	}
 	render(ctx, width, height){
@@ -98,10 +98,14 @@ class RenderAchievement extends GameEvents{
 		
 			
 		if(this.state == 1 || this.state == 2 ||this.state == 3){
-
+			
+			ctx.shadowBlur=20;
+			ctx.shadowColor="black";
 			this.renderRoundedSquare(ctx,x,y, imageSize+titleWidth*this.progress*this.progress,imageSize,imageSize*0.4,new RGBA(255,200,100,1),new RGBA(150,80,30,1) );
+			ctx.shadowBlur=0;
 			ctx.drawImage(this.imgIcon ,x+imageSize*0.05,y+imageSize*0.05, imageSize*0.9,imageSize*0.9);
 			ctx.fillStyle= "rgba(255,255,255,1)"
+			
 		}
 		if(this.state == 2){
 			ctx.font= "bold " + fontSize + "px Roboto, sans-serif, bold";

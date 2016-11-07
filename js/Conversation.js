@@ -6,9 +6,10 @@ var SCRIPT_LINE_TYPE = {
 }
 
 class ScriptLine{
-	constructor(type,content){
+	constructor(type,content, achivement = ""){
 		this.type = type;
 		this.content = content;
+		this.achivement = achivement;
 	}
 }
 class Conversation{
@@ -31,10 +32,13 @@ class Conversation{
 		conversation.before = this;
 	}
 	readContent(num){
+		var achivements = [];
 		for(var i = 0 ; i < num;i++){
+			achivements.push(this.content[0].achivement);
 			this.contentUsed.push( this.content[0]);
 			this.content.splice(0,1);
 			}
+		return achivements;
 		
 	}
 	
@@ -86,8 +90,8 @@ class Conversation{
 		
 		var conv05_youAreCreepy =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "You are creepy"), [] , []);
 		var conv05_WTF =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "WTF"), [] , []);
-		var conv05_Compile =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.IMAGE, IMAGE_ID.ME_NUDE), [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hmmm delicious"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I want to see more of you"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Would you like to come over to my place?"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "If you need,"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I could pay you some cash as well ;)")] , []);
-		var conv05NoScript = [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Oh..."),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Ok"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I am sorry if I made you nervous"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I were trying to be nice"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "It is not nice to say such thing to other fruits"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I hope you have a great day with your egocentric self")];
+		var conv05_Compile =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.IMAGE, IMAGE_ID.ME_NUDE), [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hmmm delicious"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I want to see more of you"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Would you like to come over to my place?"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "If you need,"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I could pay you some cash as well ;)","Everyone Has a Price")] , []);
+		var conv05NoScript = [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Oh..."),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Ok"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I am sorry if I made you nervous"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I were trying to be nice"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "It is not nice to say such thing to other fruits"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I hope you have a great day with your egocentric self","Cold Hearted")];
 		
 		for(var i = 0 ; i < conv05NoScript.length;i++){
 			conv05_youAreCreepy.content.push(conv05NoScript[i]);
