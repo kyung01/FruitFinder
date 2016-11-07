@@ -34,6 +34,22 @@ class Profile{
 		var profiles = new Array();
 		profiles.push( new Profile(PROFILE_ID.SELF,"YOU",0,1));
 		profiles.push( new Profile(PROFILE_ID.SUGAR,"SugarSweet",Conversation.GET_SUGAR(), 3 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Pear",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.HOT,"Hot",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DISCRETE,"SecretAgency",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.OLD,"Grandpa",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Clementine",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.NASTY,"Nasty",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.INSTAGRAM,"FilterPic",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.FETISH,"Root",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Yuzu",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Pear",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Peach",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Pomelo",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Salak",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Watermelon",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Orange",Conversation.GET_EMPTY(), 1 ) );
+		profiles.push( new Profile(PROFILE_ID.DEFAULT,"Sane",Conversation.GET_EMPTY(), 1 ) );
 		/*
 		profiles.push( new Profile(PROFILE_ID.OLD,"OLD",false));
 		profiles.push( new Profile(PROFILE_ID.HOT,"HAUT",false));

@@ -8,18 +8,24 @@ class Game extends GameEvents{
 		this.screenSearch 	= new GameScreenSearch(this.profiles, canvas.width/3);		
 		this.screenConv 	= new GameScreenConversation();
 		
+		this.renderSplash = new RenderSplash();
 		this.renderSearch = new RenderSearch();
 		this.renderConversation = new RenderConversation();
 		this.renderAchievement	=new RenderAchievement();
+		this.renderCover	=new RenderCoverScreen();
 		this.renderSearch.e_profileSelected.push( this.h_profileSelected.bind(this));//.h_profileSelected;
 		this.renderConversation.e_answerSelected.push( this.h_answerSelected.bind(this));//.h_profileSelected;
 		
 		this.progress =0;
-		this.state = 1;
+		this.state = 0;
 		this.profileSelected;
 		
-		
-		this.renderAchievement.init("New achivement here");
+		this.renderSplash.e_finishedLoading.push(this.h_ToSearchScreen.bind(this));
+		this.renderConversation.e_exit.push(this.h_ToSearchScreen.bind(this));
+		//this.renderAchievement.init("New achivement here");
+	}
+	h_ToSearchScreen(){
+		this.state = 1;
 	}
 	updateProfiles(profiles,timeElapsed){
 		for(var i = 1 ; i < profiles.length;i++){
@@ -37,13 +43,17 @@ class Game extends GameEvents{
 	}
 	update(timeElapsed){
 		this.progress = Math.max(1,this.progress+ timeElapsed);
-		this.updateProfiles(this.profiles,timeElapsed);
 		switch(this.state){
+			case 0:
+				this.renderSplash.update(timeElapsed);
+				break;
 			case 1:
+				this.updateProfiles(this.profiles,timeElapsed);
 				//this.screenSearch.update(timeElapsed);
 				this.renderSearch.update(timeElapsed); 
 				break;
 			case 2:
+				this.updateProfiles(this.profiles,timeElapsed);
 				this.renderConversation.update(timeElapsed);
 				break;
 		}
@@ -51,11 +61,23 @@ class Game extends GameEvents{
 	}
 	render(canvas, ctx){
 		switch(this.state){
+			case 0:
+				this.renderSplash.render(ctx,canvas.width, canvas.height );
+				break;
 			case 1:
-				this.renderSearch.render(ctx, canvas.width, canvas.height ,this.profiles);
+				ctx.save();
+				ctx.translate(0,this.renderCover.height);
+				this.renderSearch.render(ctx, canvas.width, canvas.height-this.renderCover.height ,this.profiles);
+				ctx.restore();
+				this.renderCover.render(ctx, canvas.width, canvas.height);
 				break;
 			case 2:
-				this.renderConversation.render(ctx, canvas.width, canvas.height ,this.profileSelected.conversation,this.progress);
+				ctx.save();
+				ctx.translate(0,this.renderCover.height);
+				this.renderConversation.render(ctx, canvas.width, canvas.height-this.renderCover.height ,
+											   this.profileSelected.name, this.profileSelected.conversation,this.progress);
+				ctx.restore();
+				this.renderCover.render(ctx, canvas.width, canvas.height);
 				break;
 		}
 		this.renderAchievement.render(ctx,canvas.width,canvas.height);
@@ -74,6 +96,7 @@ class Game extends GameEvents{
 		
 	}
 	doMouseDown(pos){
+		pos.y -= this.renderCover.height;
 		switch(this.state){
 			case 1:
 		this.renderSearch.doMouseDown(pos);//update(timeElapsed);

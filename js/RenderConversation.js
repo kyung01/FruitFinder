@@ -10,11 +10,13 @@ class RenderConversation extends RenderScrollable{
 		this.colorChoices = [new RGBA(255,200,200,1), new RGBA(200,100,100,1)];
 		this.renderLine = new RenderLine(SCRIPT_LINE_TYPE.TEXT ,"undefeind");
 		this.inputIcon = [];
+		this.inputExit = [];
 		
 		this.ratioAnimationDir = 1;
 		this.ratioAnimation = 0;
 		
 		this.e_answerSelected = new Array();
+		this.e_exit = new Array();
 		
 		this.isDisplayAnswer = false;
 		this.timerDisplayAnswer = 0;
@@ -37,13 +39,13 @@ class RenderConversation extends RenderScrollable{
 		
 	}
 	renderBegin(){
-		this.offsetY = 0;
 		
 	}
 	renderScriptLine(ctx,width,height, line, type){
 		//console.log(line);
 		var fontSize = 20;
 		var characterMax = 25;
+		var spacing = width* 0.025;
 		//this.renderLine.render(ctx,width,height,line.content,{x:0,y:0},fontSize,characterMax, this.colorPersonA[0],this.colorPersonA[1]);
 		var rectSize = {height:0};
 		var x,y,rectSize,color00,color01;
@@ -53,13 +55,13 @@ class RenderConversation extends RenderScrollable{
 			rectSize = this.renderLine.getImageRectSize(fontSize,characterMax);
 		
 		if(type ==0){
-			x=width - rectSize.width; 
+			x=width - rectSize.width -spacing; 
 			y= this.offsetY;
 			color00= this.colorPersonA[0];
 			color01 = this.colorPersonA[1];
 		}
 		else if( type ==1){
-			x=0; 
+			x=spacing; 
 			y= this.offsetY;
 			color00= this.colorPersonB[0];
 			color01 = this.colorPersonB[1];
@@ -104,10 +106,29 @@ class RenderConversation extends RenderScrollable{
 		if(conversation.next)
 			this.renderConversation(ctx,width,height,conversation.next);
 	}
-	render(ctx, width, height, conversation,progress){
+	getGradient(ctx,colorA,colorB, posY, height){
+		var my_gradient=ctx.createLinearGradient(0,posY,0,height);
+		my_gradient.addColorStop(0,colorA.getCode() );
+		my_gradient.addColorStop(1,colorB.getCode() );
+		return my_gradient;
+	}
+	renderTop(ctx,width,height,name, barHeight){
+		var fontSize = barHeight* 0.5;
+		ctx.fillStyle = this.getGradient(ctx,this.colorPersonA[0],this.colorPersonA[1],0,barHeight);
+		ctx.fillRect(0,0,width,barHeight);
+		ctx.drawImage(IMAGES.get(IMAGE_ID.ICN_BACK), 0,0,barHeight,barHeight);
+		ctx.font=fontSize+ "px Roboto, sans-serif";
+		ctx.fillStyle ='black';
+		ctx.fillText(name,barHeight,+fontSize*1.25);
+		
+		this.inputExit = [new BoxClick(0,0,barHeight,barHeight)];
+	}
+	render(ctx, width, height, name, conversation,progress){
 		this.inputIcon = [];
+		this.menuBarHeight = height*0.08;
 		ctx.save();
-		ctx.translate(0,this.scrollDistance);
+		height -= this.menuBarHeight;
+		ctx.translate(0,this.scrollDistance+this.menuBarHeight);
 		var line00 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"How about you send a face pic and I will tell you how hard I will..wqewqeqweqwe.");
 		var line01 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"qqqqqq");
 		var line02 = new RenderLine(ctx,SCRIPT_LINE_TYPE.TEXT ,"aqweqewqeeqwqewbc");
@@ -117,9 +138,10 @@ class RenderConversation extends RenderScrollable{
 		line02.pos = {x: 250, y:300};
 		while(conversation.before)
 			conversation = conversation.before;
-		this.renderBegin();
+		this.offsetY = height*0.025;
 		this.renderConversation(ctx,width,height,conversation);		
 		ctx.restore();
+		this.renderTop(ctx,width,height, name,this.menuBarHeight);
 		this.scrollDistanceMax = 1 + Math.max(0, this.offsetY-height);
 		//line00.render(ctx,width,height,20,25, colorPersonB00,colorPersonB01);
 		
@@ -130,6 +152,15 @@ class RenderConversation extends RenderScrollable{
 		
 	}
 	doMouseDown(pos){
+		for(var i= 0; i < this.inputExit.length;i++){
+			if(this.inputExit[i].isAt(pos.x, pos.y )){
+				//console.log("clicked ",i);
+				for(var j = 0 ; j < this.e_exit.length;j++){
+					this.e_exit[j]();//.e_answerSelected(i);
+				}
+			}
+		}
+		pos.y -= this.menuBarHeight;
 		for(var i= 0; i < this.inputIcon.length;i++){
 			if(this.inputIcon[i].isAt(pos.x, pos.y - this.scrollDistance)){
 				//console.log("clicked ",i);

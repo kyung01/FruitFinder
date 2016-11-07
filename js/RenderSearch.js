@@ -80,6 +80,7 @@ class RenderSearch extends RenderScrollable{
 		ctx.save();
 		ctx.strokeStyle = "rgba(0,0,0,1)";
 		ctx.fillStyle = "rgba(0,0,0,1)";
+		ctx.fillRect(0,0,width,height);
 		ctx.translate(0,this.scrollDistance);
 		
 		

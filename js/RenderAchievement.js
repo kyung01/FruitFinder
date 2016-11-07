@@ -8,18 +8,20 @@ class RenderAchievement extends GameEvents{
 		this.imgIcon = IMAGES.get(IMAGE_ID.ACHV_ICON);
 		this.header = "ACHIEVEMENT UNLCOKED";
 		this.title = "TITLE_HERE";
+		this.progressPre = 0;
 		this.progress = 0;
 		this.progressDelay = 0;
 		this.progressArm= 0;
 	}
 	reset(){
+		this.progressPre = 0;
 		this.progressArm= 0;
 		this.progress = 0;
 		this.progressDelay =0;
 	}
 	init(title){
 		this.reset();
-		this.state = 1;
+		this.state = 0.5;
 		this.title = title;
 	}
 	renderAchivement(ctx,width,height){
@@ -27,6 +29,14 @@ class RenderAchievement extends GameEvents{
 	update(timeElapsed){
 		super.update(timeElapsed);
 		if(this.state ==0) return;
+		if(this.state == 0.5){
+			this.progressPre += timeElapsed* 0.2;
+			if(this.progressPre >= 1){
+				this.progressPre = 0;
+				this.state = 1;
+			}
+			return;
+		}
 		this.progressArm +=timeElapsed;
 		if(this.state==1){
 			this.progress = Math.min(this.progress + timeElapsed*0.5, 1);
@@ -80,7 +90,7 @@ class RenderAchievement extends GameEvents{
 		ctx.save();
 		ctx.translate(-imageSize*1.2 + imageSize *this.progress, 0);
 		ctx.rotate( Math.cos(this.progress*this.progress *5)  * 3.14*0.09 * (1- (this.progress *this.progress ) )
-				   + Math.cos(this.progressArm) *( 3.14*0.02 )*( this.progress* this.progress* this.progress* this.progress)
+				   + Math.cos(this.progressArm) *( 3.14*0.02 )*( this.progress)
 				  );
 		ctx.drawImage(this.imgHand ,x,y, imageSize,imageSize);
 		ctx.restore();

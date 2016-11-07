@@ -41,7 +41,11 @@ class Conversation{
 		return achivements;
 		
 	}
-	
+	static GET_EMPTY(){
+		var lineEmpty =  new ScriptLine(SCRIPT_LINE_TYPE.EMPTY,"");
+		var conv_empty =			new Conversation(false,false,lineEmpty , [], [] );
+		return conv_empty;
+	}
 	static GET_SUGAR(){
 		var lineEmpty =  new ScriptLine(SCRIPT_LINE_TYPE.EMPTY,"");
 		var conv_empty =			new Conversation(false,false,lineEmpty , [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hi")], [] );
