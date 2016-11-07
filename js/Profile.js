@@ -11,9 +11,10 @@ class Profile{
 	}
 	reset(){
 		//if(this.isNewMessage) console.log("new meesage flushed");
-		this.conversation.readContent(this.isNewMessage);
+		var value = this.conversation.readContent(this.isNewMessage);
 		this.isNewMessage = 0;
 		this.respondingTime = 0;
+		return value;
 	}
 	getName(){
 		return this.name;

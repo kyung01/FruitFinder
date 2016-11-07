@@ -10,13 +10,16 @@ class Game extends GameEvents{
 		
 		this.renderSearch = new RenderSearch();
 		this.renderConversation = new RenderConversation();
-		
+		this.renderAchievement	=new RenderAchievement();
 		this.renderSearch.e_profileSelected.push( this.h_profileSelected.bind(this));//.h_profileSelected;
 		this.renderConversation.e_answerSelected.push( this.h_answerSelected.bind(this));//.h_profileSelected;
 		
 		this.progress =0;
 		this.state = 1;
 		this.profileSelected;
+		
+		
+		this.renderAchievement.init("New achivement here");
 	}
 	updateProfiles(profiles,timeElapsed){
 		for(var i = 1 ; i < profiles.length;i++){
@@ -38,6 +41,7 @@ class Game extends GameEvents{
 				this.renderConversation.update(timeElapsed);
 				break;
 		}
+		this.renderAchievement.update(timeElapsed);
 	}
 	render(canvas, ctx){
 		switch(this.state){
@@ -48,6 +52,7 @@ class Game extends GameEvents{
 				this.renderConversation.render(ctx, canvas.width, canvas.height ,this.profileSelected.conversation,this.progress);
 				break;
 		}
+		this.renderAchievement.render(ctx,canvas.width,canvas.height);
 	}
 	doMouseWheel(power){
 		switch(this.state){

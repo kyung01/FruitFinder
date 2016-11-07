@@ -40,7 +40,7 @@ class Conversation{
 	
 	static GET_SUGAR(){
 		var lineEmpty =  new ScriptLine(SCRIPT_LINE_TYPE.EMPTY,"");
-		var conv_empty =			new Conversation(false,false,lineEmpty , [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hi"),new ScriptLine(SCRIPT_LINE_TYPE.IMAGE, IMAGE_ID.SWEET_NUDE)], [] );
+		var conv_empty =			new Conversation(false,false,lineEmpty , [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hi")], [] );
 		var conv_hi =				new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hi"),[
 			new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Your lovely skin looks very delicious. You seem like a beautiful fruit."),
 			new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I just wanted to talk to such a beautiful plant.")
@@ -52,6 +52,11 @@ class Conversation{
 			conv02_thankyou.content.push(conv02_content[i]);
 			conv02_lmaoThankYou.content.push(conv02_content[i]);
 		}
+		
+		conv_empty.addChoice(conv_hi);
+		conv_hi.addChoice(conv02_thankyou);
+		conv_hi.addChoice(conv02_lmaoThankYou);
+		
 		var conv02_requestAgain =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "What?"), [new ScriptLine(1, "I mean, what are you trying to do by being here? ^^")] , []);
 		
 		var conv_03WhatAreYouLookingFor =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "What do you mean? do what?"), 
@@ -79,14 +84,19 @@ class Conversation{
 		conv03_question02.addChoice(conv04_hot);
 		
 		
-		var conv_hiBackToYouA =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "say A"), [new ScriptLine(1, "HiBackToasdsdasdYou")] , []);
-		var conv_hiBackToYouA =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "say A"), [new ScriptLine(1, "HiBackToasdsdasdYou")] , []);
-		var conv_hiBackToYouB =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "say B"), [new ScriptLine(1, "HiBackTosdsdasadou")] , []);
-		var conv_hiBackToYouC =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "say C"), [new ScriptLine(1, "HiBackTosdasdsadou")] , []);
-
-		conv_empty.addChoice(conv_hi);
-		conv_hi.addChoice(conv02_thankyou);
-		conv_hi.addChoice(conv02_lmaoThankYou);
+		var conv05_youAreCreepy =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "You are creepy"), [] , []);
+		var conv05_WTF =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "WTF"), [] , []);
+		var conv05_Compile =	new Conversation(false,false,new ScriptLine(SCRIPT_LINE_TYPE.IMAGE, IMAGE_ID.ME_NUDE), [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Hmmm delicious"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I want to see more of you"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Would you like to come over to my place?"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "If you need,"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I could pay you some cash as well ;)")] , []);
+		var conv05NoScript = [new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Oh..."),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "Ok"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I am sorry if I made you nervous"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I were trying to be nice"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "It is not nice to say such thing to other fruits"),new ScriptLine(SCRIPT_LINE_TYPE.TEXT, "I hope you have a great day with your egocentric self")];
+		
+		for(var i = 0 ; i < conv05NoScript.length;i++){
+			conv05_youAreCreepy.content.push(conv05NoScript[i]);
+			conv05_WTF.content.push(conv05NoScript[i]);
+		}
+		conv04_hot.addChoice(conv05_youAreCreepy);
+		conv04_hot.addChoice(conv05_WTF);
+		conv04_hot.addChoice(conv05_Compile);
+		//new ScriptLine(SCRIPT_LINE_TYPE.IMAGE, IMAGE_ID.ME_NUDE)
 		//conv_hi.addChoice(conv_hiBackToYouC);
 		//conv_hiBackToYouA.addChoice(conv_hiBackToYouB);
 		//conv_hiBackToYouA.addChoice(conv_hiBackToYouC);
